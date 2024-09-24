@@ -1,0 +1,85 @@
+[gd_scene load_steps=21 format=4 uid="uid://cslpeok570yya"]
+
+[ext_resource type="Texture2D" uid="uid://dqy1o1vlx2hih" path="res://Game Boards/Chinese Checkers Small.png" id="1_0gqyt"]
+[ext_resource type="Script" path="res://main.gd" id="1_m3rdi"]
+[ext_resource type="Texture2D" uid="uid://dgqgh718gu7m0" path="res://Game Boards/tile2.png" id="2_xu0o6"]
+[ext_resource type="Script" path="res://pieces_tile_map.gd" id="3_hjaqk"]
+[ext_resource type="Texture2D" uid="uid://ccw3e4x02en0w" path="res://Pieces/green (1).png" id="4_3sv1a"]
+[ext_resource type="Script" path="res://board_tile_map.gd" id="4_sr02f"]
+[ext_resource type="Texture2D" uid="uid://b4m2wf6404yga" path="res://Pieces/grey (1).png" id="5_ik5fu"]
+[ext_resource type="Texture2D" uid="uid://v2oa05n6prk8" path="res://Pieces/blue (1).png" id="6_xy88e"]
+[ext_resource type="Texture2D" uid="uid://cyki7fuibmjgv" path="res://Pieces/purple (1).png" id="7_4a08i"]
+[ext_resource type="Texture2D" uid="uid://dsfy8dt4sxnqm" path="res://Pieces/red (1).png" id="8_a2uj4"]
+[ext_resource type="Texture2D" uid="uid://molc5gvsi2ba" path="res://Pieces/yellow (1).png" id="9_pfue5"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ana6g"]
+texture = ExtResource("2_xu0o6")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+1:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_advkk"]
+tile_shape = 3
+tile_size = Vector2i(69, 69)
+sources/1 = SubResource("TileSetAtlasSource_ana6g")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a04wr"]
+texture = ExtResource("4_3sv1a")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2b02k"]
+texture = ExtResource("5_ik5fu")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1773s"]
+texture = ExtResource("6_xy88e")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uap84"]
+texture = ExtResource("7_4a08i")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gi2bx"]
+texture = ExtResource("8_a2uj4")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8n5dg"]
+texture = ExtResource("9_pfue5")
+texture_region_size = Vector2i(69, 69)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ix5j7"]
+tile_shape = 3
+tile_size = Vector2i(69, 69)
+sources/17 = SubResource("TileSetAtlasSource_a04wr")
+sources/18 = SubResource("TileSetAtlasSource_2b02k")
+sources/19 = SubResource("TileSetAtlasSource_1773s")
+sources/20 = SubResource("TileSetAtlasSource_uap84")
+sources/21 = SubResource("TileSetAtlasSource_gi2bx")
+sources/22 = SubResource("TileSetAtlasSource_8n5dg")
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_m3rdi")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="ChineseCheckersSmall" type="Sprite2D" parent="."]
+position = Vector2(0, -15)
+texture = ExtResource("1_0gqyt")
+
+[node name="BoardTileMap" type="TileMapLayer" parent="."]
+visible = false
+tile_map_data = PackedByteArray("AAD8/wAAAQABAAAAAAD+/wAAAQABAAAAAAD9/wAAAQABAAAAAAD8////AQABAAAAAAD9////AQABAAAAAAD+////AQABAAAAAAD/////AQABAAAAAAAAAP3/AQABAAAAAAAAAP7/AQABAAAAAAD///7/AQABAAAAAAD+//7/AQABAAAAAAD9//7/AQABAAAAAAD8//7/AQABAAAAAAD7//3/AQABAAAAAAD7//z/AQABAAAAAAD8//z/AQABAAAAAAD8//3/AQABAAAAAAD9//z/AQABAAAAAAD9//3/AQABAAAAAAD+//3/AQABAAAAAAD///3/AQABAAAAAAAAAPz/AQABAAAAAAD///z/AQABAAAAAAD+//z/AQABAAAAAAD+//v/AQABAAAAAAD///v/AQABAAAAAAAAAPv/AQABAAAAAAAAAPr/AQABAAAAAAD///n/AQABAAAAAAD///r/AQABAAAAAAABAP7/AQABAAAAAAABAP3/AQABAAAAAAABAPz/AQABAAAAAAAAAP//AQABAAAAAAD8/wEAAQABAAAAAAD+/wEAAQABAAAAAAD+/wIAAQABAAAAAAD//wIAAQABAAAAAAD+/wMAAQABAAAAAAD//wUAAQABAAAAAAD//wQAAQABAAAAAAD//wMAAQABAAAAAAAAAAMAAQABAAAAAAAAAAQAAQABAAAAAAAEAAIAAQABAAAAAAADAAIAAQABAAAAAAACAAIAAQABAAAAAAABAAIAAQABAAAAAAAAAAIAAQABAAAAAAD9/wIAAQABAAAAAAD8/wIAAQABAAAAAAD7/wIAAQABAAAAAAD7/wEAAQABAAAAAAD9/wEAAQABAAAAAAD//wEAAQABAAAAAAAAAAEAAQABAAAAAAABAAEAAQABAAAAAAACAAEAAQABAAAAAAADAAEAAQABAAAAAAADAAAAAQABAAAAAAACAAAAAQABAAAAAAABAAAAAQABAAAAAAAAAAAAAQABAAAAAAD//wAAAQABAAAAAAABAP//AQABAAAAAAACAP//AQABAAAAAAADAP7/AQABAAAAAAACAP7/AQABAAAAAAACAP3/AQABAAAAAAADAP3/AQABAAAAAAAEAPz/AQABAAAAAAADAPz/AQABAAAAAAACAPz/AQABAAAAAAA=")
+tile_set = SubResource("TileSet_advkk")
+script = ExtResource("4_sr02f")
+
+[node name="PiecesTileMap" type="TileMapLayer" parent="."]
+z_index = 5
+tile_map_data = PackedByteArray("AAD9/wIAEwAAAAAAAAD8/wIAEwAAAAAAAAD7/wIAEwAAAAAAAAD7/wEAEwAAAAAAAAD8/wAAEwAAAAAAAAD8/wEAEwAAAAAAAAAAAAMAFQAAAAAAAAD//wMAFQAAAAAAAAD+/wMAFQAAAAAAAAAAAAQAFQAAAAAAAAD//wQAFQAAAAAAAAD//wUAFQAAAAAAAAACAAIAFAAAAAAAAAADAAIAFAAAAAAAAAAEAAIAFAAAAAAAAAADAAEAFAAAAAAAAAADAAAAFAAAAAAAAAACAAEAFAAAAAAAAAADAP7/EgAAAAAAAAADAP3/EgAAAAAAAAAEAPz/EgAAAAAAAAADAPz/EgAAAAAAAAACAP3/EgAAAAAAAAACAPz/EgAAAAAAAAD8//7/EQAAAAAAAAD7//3/EQAAAAAAAAD7//z/EQAAAAAAAAD8//z/EQAAAAAAAAD8//3/EQAAAAAAAAD9//z/EQAAAAAAAAD+//v/FgAAAAAAAAD///v/FgAAAAAAAAAAAPv/FgAAAAAAAAAAAPr/FgAAAAAAAAD///r/FgAAAAAAAAD///n/FgAAAAAAAAA=")
+tile_set = SubResource("TileSet_ix5j7")
+script = ExtResource("3_hjaqk")
