@@ -23,7 +23,7 @@ var neighboring_vectors_odd_y_dict : Dictionary = {
 var neighboring_vectors_even_y_dict : Dictionary = {
 	"left": [-1, 0],
 	"right": [1, 0],
-	"up_left": [-1. -1],
+	"up_left": [-1, -1],
 	"up_right": [0, -1],
 	"down_left": [-1, 1],
 	"down_right": [0, -1]
@@ -102,11 +102,11 @@ func move_selected_piece(mouse_pos: Vector2, piece):
 
 func calc_possible_moves(selected_piece_cell):
 	# Get cells of every piece on the board
-	var all_pieces_array = pieces_map.update_used_cells()
+	var all_pieces_array : Array = pieces_map.update_used_cells()
+	var neighboring_moves : Array
+	var skippable_moves : Array
+	var all_possible_moves : Array
 	
-#	selected piece can move to any of the 6 neighboring pieces as long as no piece is present
-	var neighboring_moves_array : Array
-	var skippable_moves_array : Array
 	var odd_y : bool
 	
 	if (selected_piece_cell.y % 2 == 1):
@@ -115,27 +115,78 @@ func calc_possible_moves(selected_piece_cell):
 	else:
 		# Piece is on even y coord
 		odd_y = false
+	
+	neighboring_moves = calc_neighboring_moves(selected_piece_cell, all_pieces_array, odd_y)
+	
+	skippable_moves = calc_skippable_moves(selected_piece_cell, all_pieces_array, odd_y)
+	
+	all_possible_moves = neighboring_moves + skippable_moves
+	print("Neighbor moves: ", neighboring_moves, "Skipping moves: ", skippable_moves)
+
+
+func calc_neighboring_moves(selected_piece_cell, all_pieces, odd_y):
+#	selected piece can move to any of the 6 neighboring pieces as long as no piece is present
+	var neighboring_moves_array : Array
+	
 	if odd_y:
 		for move in neighboring_vectors_odd_y_dict:
 			var move_vector = Vector2i(neighboring_vectors_odd_y_dict[move][0], neighboring_vectors_odd_y_dict[move][1])
 			var possible_neighboring_move : Vector2i = selected_piece_cell + move_vector
 		
 			# Check if there is a piece already at possiible move and that it's on the game board
-			if possible_neighboring_move not in all_pieces_array and possible_neighboring_move not in neighboring_moves_array:
+			if possible_neighboring_move not in all_pieces and possible_neighboring_move not in neighboring_moves_array:
 				if possible_neighboring_move in gameboard_cells_array:
 					neighboring_moves_array.append(possible_neighboring_move)
 	
 	else:
 		for move in neighboring_vectors_even_y_dict:
-			var move_vector = Vector2i(move[0], move[1])
+			var move_vector = Vector2i(neighboring_vectors_even_y_dict[move][0], neighboring_vectors_even_y_dict[move][1])
 			var possible_neighboring_move : Vector2i = selected_piece_cell + move_vector
 		
 			# Check if there is a piece already at possiible move and that it's on the game board
-			if possible_neighboring_move not in all_pieces_array and possible_neighboring_move not in neighboring_moves_array:
+			if possible_neighboring_move not in all_pieces and possible_neighboring_move not in neighboring_moves_array:
 				if possible_neighboring_move in gameboard_cells_array:
 					neighboring_moves_array.append(possible_neighboring_move)
 		
-	print("Neighboring moves = ", neighboring_moves_array)
+	return neighboring_moves_array
+
+
+func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y):
+	
+	var skipping_moves_array : Array = []
+	
+	for move in skippable_moves:
+		var move_vector = Vector2i(skippable_moves[move][0], skippable_moves[move][1])
+		var possible_skipping_move : Vector2i = selected_piece_cell + move_vector
+		
+		# Check if skip is possble > cell is available on the board 
+		if possible_skipping_move not in all_pieces and possible_skipping_move in gameboard_cells_array and possible_skipping_move not in skipping_moves_array:
+			# Check the middle cell for a piece. If true, then skip is possible
+			if odd_y:
+				var vector_math = Vector2i(neighboring_vectors_odd_y_dict[move][0], neighboring_vectors_odd_y_dict[move][1])
+				var middle_cell = selected_piece_cell + vector_math
+				if middle_cell in all_pieces:
+					print("Skip: ", possible_skipping_move)
+					skipping_moves_array.append(possible_skipping_move)
+
+			else:
+				var vector_math = Vector2i(neighboring_vectors_even_y_dict[move][0], neighboring_vectors_even_y_dict[move][1])
+				var middle_cell = selected_piece_cell + vector_math
+				if middle_cell in all_pieces:
+					print("Skip: ", possible_skipping_move)
+					skipping_moves_array.append(possible_skipping_move)
+	
+	return skipping_moves_array
+
+
+func calc_piece_to_be_skipped(selected_piece_cell):
+	if (selected_piece_cell.y % 2 == 1):
+		# Piece is on odd y coord
+		var neighboring_moves_to_test = [[-1, 0], [1, 0], [1, -1], [0, -1], [0, 1], [1, 1]]
+	else:
+		# Piece is on even y coord
+		var neighboring_moves_to_test = [[-1, 0], [1, 0], [-1, -1], [0, -1], [-1, 1], [0, -1]]
+
 
 #	selected piece can move in a straight line if jumping over a present piece
 	#for move in skippable_moves:
@@ -147,11 +198,3 @@ func calc_possible_moves(selected_piece_cell):
 			#if possible_skippable_move in gameboard_cells_array:
 				## Check if there is a piece in between selected_piece_cell and possible_skippable_move cell
 				#pass
-
-func calc_piece_to_be_skipped(selected_piece_cell):
-	if (selected_piece_cell.y % 2 == 1):
-		# Piece is on odd y coord
-		var neighboring_moves_to_test = [[-1, 0], [1, 0], [1, -1], [0, -1], [0, 1], [1, 1]]
-	else:
-		# Piece is on even y coord
-		var neighboring_moves_to_test = [[-1, 0], [1, 0], [-1, -1], [0, -1], [-1, 1], [0, -1]]
