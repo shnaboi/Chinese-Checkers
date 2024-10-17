@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://cghnocs5gcq6s"]
+
+[ext_resource type="Script" path="res://cursor_node.gd" id="1_4rm1b"]
+[ext_resource type="Texture2D" uid="uid://b80mxx5wmkd44" path="res://Cursors/disabled.png" id="2_wrv7q"]
+[ext_resource type="Texture2D" uid="uid://dirk8iag2f5s2" path="res://Cursors/hand_thin_small_closed.png" id="3_k5evg"]
+[ext_resource type="Texture2D" uid="uid://d1hss76dah8u1" path="res://Cursors/hand_thin_small_open.png" id="4_35m4l"]
+[ext_resource type="Texture2D" uid="uid://bfxmvwody3gv5" path="res://Cursors/pointer_b_shaded.png" id="5_cgj0v"]
+
+[node name="CursorNode" type="Node2D"]
+script = ExtResource("1_4rm1b")
+
+[node name="Disabled" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_wrv7q")
+
+[node name="Selected" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("3_k5evg")
+
+[node name="Option" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-1, -1)
+texture = ExtResource("4_35m4l")
+
+[node name="Default" type="Sprite2D" parent="."]
+position = Vector2(5, 6)
+texture = ExtResource("5_cgj0v")

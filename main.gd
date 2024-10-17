@@ -1,10 +1,17 @@
 extends Node2D
 
 
+@export var main_camera : Node2D
+
+var CURSOR_SPEED = 300.0
+
+#var cursor_position : Vector2 = Vector2.ZERO
+
 # References to the tilemaps
 var pieces_map
 var board_map
 var gameboard_cells_array : Array
+var cursors
 
 # Store the selected piece tile position and ID
 var selected_piece = null
@@ -47,6 +54,26 @@ func _ready():
 	pieces_map = $PiecesTileMap  # Tilemap for pieces
 	board_map = $BoardTileMap    # Tilemap for the board spaces
 	gameboard_cells_array = board_map.get_gameboard_cells()
+	#cursors = $Cursors
+	
+	main_camera = $Camera2D
+	
+	#cursor_position = get_global_mouse_position()
+
+
+#func _physics_process(delta: float) -> void:
+	#
+	#var controller_vector = Input.get_vector("Left", "Right", "Up", "Down")
+	#cursor_position = controller_vector * CURSOR_SPEED * delta
+	#
+	## Clamp the cursor position to the viewport
+	#var viewport_rect = get_viewport().get_visible_rect()
+	#cursor_position.x = clamp(cursor_position.x, viewport_rect.position.x, viewport_rect.size.x -1)
+	#cursor_position.y = clamp(cursor_position.y, viewport_rect.position.y, viewport_rect.size.y -1)
+	#
+	#get_viewport().warp_mouse(cursor_position)
+	#
+	#print(cursor_position)
 
 
 # Detect mouse input
@@ -74,6 +101,7 @@ func select_piece(mouse_pos: Vector2):
 		selected_piece_pos = piece_tile_pos  # Store the selected piece's position
 		selected_piece = piece
 		possible_moves_array = calc_possible_moves(selected_piece_pos) #Pass x,y of piece to calculate moves
+		#Input.set_custom_mouse_cursor(cursors.hand_closed, 6, cursors.hotspot)
 		print("Piece selected at: ", selected_piece_pos)
 	else:
 		print("No piece found at: ", piece_tile_pos)
@@ -160,31 +188,6 @@ func calc_neighboring_moves(selected_piece_cell, all_pieces, odd_y):
 	return neighboring_moves_array
 
 
-#func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y):
-	#
-	#var skipping_moves_array : Array = []
-	#
-	#for move in skippable_moves:
-		#var move_vector = Vector2i(skippable_moves[move][0], skippable_moves[move][1])
-		#var possible_skipping_move : Vector2i = selected_piece_cell + move_vector
-		#
-		## Check if skip is possble > cell is available on the board 
-		#if possible_skipping_move not in all_pieces and possible_skipping_move in gameboard_cells_array and possible_skipping_move not in skipping_moves_array:
-			## Check the middle cell for a piece. If true, then skip is possible
-			#if odd_y:
-				#var vector_math = Vector2i(neighboring_vectors_odd_y_dict[move][0], neighboring_vectors_odd_y_dict[move][1])
-				#var middle_cell = selected_piece_cell + vector_math
-				#if middle_cell in all_pieces:
-					#skipping_moves_array.append(possible_skipping_move)
-			#
-			#else:
-				#var vector_math = Vector2i(neighboring_vectors_even_y_dict[move][0], neighboring_vectors_even_y_dict[move][1])
-				#var middle_cell = selected_piece_cell + vector_math
-				#if middle_cell in all_pieces:
-					#skipping_moves_array.append(possible_skipping_move)
-	#
-	#return skipping_moves_array
-
 func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y, skipping_moves_array = []):
 	var new_skips : Array = []
 
@@ -217,3 +220,13 @@ func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y, skipping_moves
 		calc_skippable_moves(skip, all_pieces, odd_y, skipping_moves_array)
 
 	return skipping_moves_array
+
+
+# **** MULTIPLAYER ****
+
+
+# Create player variable to change for handling turns
+var current_player = 1
+
+func handle_turn(position : Vector2i):
+	pass
