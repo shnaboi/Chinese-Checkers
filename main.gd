@@ -9,6 +9,7 @@ var pieces_map
 var board_map
 var gameboard_cells_array : Array
 var cursors
+var cursor_pos
 
 # Store the selected piece tile position and ID
 var selected_piece = null
@@ -56,23 +57,23 @@ func _ready():
 # Detect mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
-		var mouse_pos = cursors.position
+		cursor_pos = cursors.position
 
 		if selected_piece_pos == null:
 			# Try to select a piece
-			select_piece(mouse_pos)
+			select_piece(cursor_pos)
 		else:
 			# Try to move the piece to the selected board space
-			move_selected_piece(mouse_pos, selected_piece, possible_moves_array)
+			move_selected_piece(cursor_pos, selected_piece, possible_moves_array)
 
 
 func _physics_process(delta: float) -> void:
 	check_option()
 
 # Function to select a piece if clicked
-func select_piece(mouse_pos: Vector2):
+func select_piece(cursor_pos: Vector2):
 	# Convert the mouse position to the tile position on the pieces tilemap
-	var piece_tile_pos = pieces_map.local_to_map(mouse_pos)
+	var piece_tile_pos = pieces_map.local_to_map(cursor_pos)
 
 	# Check if there's a piece at the clicked tile
 	var piece = pieces_map.get_cell_source_id(piece_tile_pos)
@@ -90,9 +91,9 @@ func select_piece(mouse_pos: Vector2):
 
 
 # Function to move the selected piece to the clicked board space
-func move_selected_piece(mouse_pos: Vector2, piece, possible_moves):
+func move_selected_piece(cursor_pos: Vector2, piece, possible_moves):
 	# Convert the mouse position to the tile position on the board tilemap
-	var board_tile_pos = board_map.local_to_map(mouse_pos)
+	var board_tile_pos = board_map.local_to_map(cursor_pos)
 	var board_tile = board_map.get_cell_source_id(board_tile_pos)
 	
 	# Check if the clicked space on the board is a valid move 
@@ -212,8 +213,18 @@ func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y, skipping_moves
 
 
 func check_option():
-	if cursors.global_mouse_pos == null:
-		pass
+	cursor_pos = cursors.position
+	var piece_tile_pos = pieces_map.local_to_map(cursor_pos)
+
+	# Check ID of piece
+	var piece_id = pieces_map.get_cell_source_id(piece_tile_pos)
+	
+	if selected_piece != null:
+		cursors.set_cursor_appearance(cursors.MICE.SELECTED)
+	elif piece_id == current_player:
+		cursors.set_cursor_appearance(cursors.MICE.OPTION)
+	else:
+		cursors.set_cursor_appearance()
 
 # **** MULTIPLAYER ****
 
@@ -225,7 +236,7 @@ func change_player():
 	
 	# Reset cursor appearance
 	cursors.position = Vector2(0, 0)
-	cursors.set_cursor_appearance(cursors.MICE.DEFAULT)
+	cursors.set_cursor_appearance()
 	
 	cursors.timer.stop()
 	

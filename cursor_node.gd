@@ -55,7 +55,7 @@ func update_cursor_pos(delta: float, piece_selected) -> void:
 
 
 # Function to change the cursor sprite appearance based on selection state
-func set_cursor_appearance(new_mouse: MICE):
+func set_cursor_appearance(new_mouse: MICE = MICE.DEFAULT):
 	mouse = new_mouse
 	
 	if mouse == MICE.SELECTED:
