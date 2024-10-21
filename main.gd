@@ -1,12 +1,6 @@
 extends Node2D
 
 
-@export var main_camera : Node2D
-
-var CURSOR_SPEED = 300.0
-
-#var cursor_position : Vector2 = Vector2.ZERO
-
 # References to the tilemaps
 var pieces_map
 var board_map
@@ -54,27 +48,7 @@ func _ready():
 	pieces_map = $PiecesTileMap  # Tilemap for pieces
 	board_map = $BoardTileMap    # Tilemap for the board spaces
 	gameboard_cells_array = board_map.get_gameboard_cells()
-	#cursors = $Cursors
-	
-	main_camera = $Camera2D
-	
-	#cursor_position = get_global_mouse_position()
-
-
-#func _physics_process(delta: float) -> void:
-	#
-	#var controller_vector = Input.get_vector("Left", "Right", "Up", "Down")
-	#cursor_position = controller_vector * CURSOR_SPEED * delta
-	#
-	## Clamp the cursor position to the viewport
-	#var viewport_rect = get_viewport().get_visible_rect()
-	#cursor_position.x = clamp(cursor_position.x, viewport_rect.position.x, viewport_rect.size.x -1)
-	#cursor_position.y = clamp(cursor_position.y, viewport_rect.position.y, viewport_rect.size.y -1)
-	#
-	#get_viewport().warp_mouse(cursor_position)
-	#
-	#print(cursor_position)
-
+	cursors = $CursorNode
 
 # Detect mouse input
 func _input(event):
@@ -101,7 +75,9 @@ func select_piece(mouse_pos: Vector2):
 		selected_piece_pos = piece_tile_pos  # Store the selected piece's position
 		selected_piece = piece
 		possible_moves_array = calc_possible_moves(selected_piece_pos) #Pass x,y of piece to calculate moves
-		#Input.set_custom_mouse_cursor(cursors.hand_closed, 6, cursors.hotspot)
+		
+		cursors.piece_selected = true
+		cursors.set_cursor_appearance(cursors.MICE.SELECTED)
 		print("Piece selected at: ", selected_piece_pos)
 	else:
 		print("No piece found at: ", piece_tile_pos)
@@ -111,10 +87,9 @@ func select_piece(mouse_pos: Vector2):
 func move_selected_piece(mouse_pos: Vector2, piece, possible_moves):
 	# Convert the mouse position to the tile position on the board tilemap
 	var board_tile_pos = board_map.local_to_map(mouse_pos)
-
-	# Check if the clicked space on the board is a valid move (you can add further checks)
 	var board_tile = board_map.get_cell_source_id(board_tile_pos)
-
+	
+	# Check if the clicked space on the board is a valid move 
 	if board_tile_pos in possible_moves_array:  # If the move is valid after calculation
 		print("Moving piece to: ", board_tile_pos)
 		
@@ -129,8 +104,16 @@ func move_selected_piece(mouse_pos: Vector2, piece, possible_moves):
 		selected_piece_pos = null
 		# Reset possible_moves_array
 		possible_moves_array = []
+		
+		# Reset cursor appearance
+		cursors.piece_selected = null
+		cursors.set_cursor_appearance(cursors.MICE.DEFAULT)
+		
 	else:
 		print("Invalid move at: ", board_tile_pos)
+		
+		# Set cursor appearance to disabled
+		cursors.set_cursor_appearance(cursors.MICE.DISABLED)
 
 
 func calc_possible_moves(selected_piece_cell):
