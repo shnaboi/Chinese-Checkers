@@ -1,5 +1,8 @@
 extends Node2D
 
+
+@onready var timer = $Timer
+
 var cursor_speed = 333.0
 var global_mouse_pos
 var piece_selected = null
@@ -12,7 +15,6 @@ var disabled_cursor : Sprite2D
 enum MICE { DEFAULT, OPTION, SELECTED, DISABLED }
 
 var mouse : MICE = MICE.DEFAULT 
-var old_mouse : MICE
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,14 +40,12 @@ func update_cursor_pos(delta: float, piece_selected) -> void:
 	# If controller is being used, position follows controller, else it follows mouse
 	if controller_vector.length() > 0:
 		position += Vector2(controller_vector.x, controller_vector.y) * cursor_speed * delta
-		if piece_selected != null:
+		if timer.time_left < 1 and timer.time_left != 0:
 			set_cursor_appearance(MICE.SELECTED)
 	elif Input.get_last_mouse_velocity() != Vector2(0, 0):
 		position = global_mouse_pos
-		if piece_selected != null:
+		if timer.time_left < 1 and timer.time_left != 0:
 			set_cursor_appearance(MICE.SELECTED)
-	
-	
 	
 	
 	# Clamp cursor to screen
@@ -70,6 +70,7 @@ func set_cursor_appearance(new_mouse: MICE):
 		disabled_cursor.visible = false
 	elif mouse == MICE.DISABLED:
 		disabled_cursor.visible = true
+		timer.start()
 		option_cursor.visible = false
 		selected_cursor.visible = false
 		default_cursor.visible = false
@@ -78,3 +79,7 @@ func set_cursor_appearance(new_mouse: MICE):
 		option_cursor.visible = false
 		selected_cursor.visible = false
 		disabled_cursor.visible = false
+
+
+func _on_timer_timeout() -> void:
+	set_cursor_appearance(MICE.SELECTED)

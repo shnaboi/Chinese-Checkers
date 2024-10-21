@@ -26,3 +26,8 @@ texture = ExtResource("4_35m4l")
 [node name="Default" type="Sprite2D" parent="."]
 position = Vector2(5, 6)
 texture = ExtResource("5_cgj0v")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.69
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

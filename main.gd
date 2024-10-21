@@ -1,6 +1,9 @@
 extends Node2D
 
 
+# Create player variable to change for handling turns
+var current_player = 1
+
 # References to the tilemaps
 var pieces_map
 var board_map
@@ -53,7 +56,7 @@ func _ready():
 # Detect mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
-		var mouse_pos = get_global_mouse_position()
+		var mouse_pos = cursors.position
 
 		if selected_piece_pos == null:
 			# Try to select a piece
@@ -63,6 +66,9 @@ func _input(event):
 			move_selected_piece(mouse_pos, selected_piece, possible_moves_array)
 
 
+func _physics_process(delta: float) -> void:
+	check_option()
+
 # Function to select a piece if clicked
 func select_piece(mouse_pos: Vector2):
 	# Convert the mouse position to the tile position on the pieces tilemap
@@ -71,7 +77,7 @@ func select_piece(mouse_pos: Vector2):
 	# Check if there's a piece at the clicked tile
 	var piece = pieces_map.get_cell_source_id(piece_tile_pos)
 
-	if piece != -1:  # A piece is present
+	if piece == current_player:  # A piece is present
 		selected_piece_pos = piece_tile_pos  # Store the selected piece's position
 		selected_piece = piece
 		possible_moves_array = calc_possible_moves(selected_piece_pos) #Pass x,y of piece to calculate moves
@@ -102,12 +108,12 @@ func move_selected_piece(mouse_pos: Vector2, piece, possible_moves):
 		# Clear the selected piece
 		selected_piece = null
 		selected_piece_pos = null
+		
 		# Reset possible_moves_array
 		possible_moves_array = []
 		
-		# Reset cursor appearance
-		cursors.piece_selected = null
-		cursors.set_cursor_appearance(cursors.MICE.DEFAULT)
+		#change player turn
+		change_player()
 		
 	else:
 		print("Invalid move at: ", board_tile_pos)
@@ -205,11 +211,27 @@ func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y, skipping_moves
 	return skipping_moves_array
 
 
+func check_option():
+	if cursors.global_mouse_pos == null:
+		pass
+
 # **** MULTIPLAYER ****
 
+func change_player():
+	if current_player != 6:
+		current_player += 1
+	else:
+		current_player = 1
+	
+	# Reset cursor appearance
+	cursors.position = Vector2(0, 0)
+	cursors.set_cursor_appearance(cursors.MICE.DEFAULT)
+	
+	cursors.timer.stop()
+	
+	
+	print("Player ", current_player, "s turn")
 
-# Create player variable to change for handling turns
-var current_player = 1
 
 func handle_turn(position : Vector2i):
 	pass
