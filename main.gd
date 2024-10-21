@@ -145,6 +145,9 @@ func calc_possible_moves(selected_piece_cell):
 	
 	all_possible_moves = neighboring_moves + skippable_moves
 	
+	for move in all_possible_moves:
+		board_map.show_possible_moves(move)
+	
 	print("Neighbor moves: ", neighboring_moves, "Skipping moves: ", skippable_moves)
 	print(all_possible_moves)
 	
@@ -239,6 +242,9 @@ func change_player():
 	cursors.set_cursor_appearance()
 	
 	cursors.timer.stop()
+	
+	#FOR DEBUGGING - ERASE PREVIOUS POSSIBLE MOVES
+	board_map.erase_previous_possible_moves()
 	
 	
 	print("Player ", current_player, "s turn")
