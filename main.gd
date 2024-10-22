@@ -134,13 +134,6 @@ func calc_possible_moves(selected_piece_cell):
 	
 	odd_y = (abs(selected_piece_cell.y) % 2 == 1)
 	
-	#if (selected_piece_cell.y % 2 == 1):
-		## Piece is on odd y coord
-		#odd_y = true
-	#else:
-		## Piece is on even y coord
-		#odd_y = false
-	
 	neighboring_moves = calc_neighboring_moves(selected_piece_cell, all_pieces_array, odd_y)
 	
 	skippable_moves = calc_skippable_moves(selected_piece_cell, all_pieces_array, odd_y)
@@ -221,7 +214,9 @@ func check_option():
 	# Check ID of piece
 	var piece_id = pieces_map.get_cell_source_id(piece_tile_pos)
 	
-	if selected_piece != null:
+	if cursors.disabled_cursor:
+		pass
+	elif selected_piece != null:
 		cursors.set_cursor_appearance(cursors.MICE.SELECTED)
 	elif piece_id == current_player:
 		cursors.set_cursor_appearance(cursors.MICE.OPTION)
