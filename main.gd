@@ -34,7 +34,7 @@ var neighboring_vectors_even_y_dict : Dictionary = {
 	"up_left": [-1, -1],
 	"up_right": [0, -1],
 	"down_left": [-1, 1],
-	"down_right": [0, -1]
+	"down_right": [0, 1]
 }
 
 var skippable_moves : Dictionary = {
@@ -132,12 +132,14 @@ func calc_possible_moves(selected_piece_cell):
 	
 	var odd_y : bool
 	
-	if (selected_piece_cell.y % 2 == 1):
-		# Piece is on odd y coord
-		odd_y = true
-	else:
-		# Piece is on even y coord
-		odd_y = false
+	odd_y = (abs(selected_piece_cell.y) % 2 == 1)
+	
+	#if (selected_piece_cell.y % 2 == 1):
+		## Piece is on odd y coord
+		#odd_y = true
+	#else:
+		## Piece is on even y coord
+		#odd_y = false
 	
 	neighboring_moves = calc_neighboring_moves(selected_piece_cell, all_pieces_array, odd_y)
 	
@@ -145,11 +147,11 @@ func calc_possible_moves(selected_piece_cell):
 	
 	all_possible_moves = neighboring_moves + skippable_moves
 	
+	# ***** FOR DEBUGGING: SHOW ALL POSSIBLE MOVES *****
 	for move in all_possible_moves:
 		board_map.show_possible_moves(move)
 	
 	print("Neighbor moves: ", neighboring_moves, "Skipping moves: ", skippable_moves)
-	print(all_possible_moves)
 	
 	return all_possible_moves
 
@@ -187,8 +189,9 @@ func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y, skipping_moves
 	for move in skippable_moves:
 		var move_vector = Vector2i(skippable_moves[move][0], skippable_moves[move][1])
 		var possible_skipping_move : Vector2i = selected_piece_cell + move_vector
+		var vector_math
 
-		# Check if skip is possible > cell is available on the board 
+		# Check if skip is possible AND cell is available on the board 
 		if (
 			possible_skipping_move not in all_pieces and 
 			possible_skipping_move in gameboard_cells_array and
@@ -196,17 +199,13 @@ func calc_skippable_moves(selected_piece_cell, all_pieces, odd_y, skipping_moves
 			):
 			# Check the middle cell for a piece. If true, then skip is possible
 			if odd_y:
-				var vector_math = Vector2i(neighboring_vectors_odd_y_dict[move][0], neighboring_vectors_odd_y_dict[move][1])
-				var middle_cell = selected_piece_cell + vector_math
-				if middle_cell in all_pieces:
-					skipping_moves_array.append(possible_skipping_move)
-					new_skips.append(possible_skipping_move)
+				vector_math = Vector2i(neighboring_vectors_odd_y_dict[move][0], neighboring_vectors_odd_y_dict[move][1])
 			else:
-				var vector_math = Vector2i(neighboring_vectors_even_y_dict[move][0], neighboring_vectors_even_y_dict[move][1])
-				var middle_cell = selected_piece_cell + vector_math
-				if middle_cell in all_pieces:
-					skipping_moves_array.append(possible_skipping_move)
-					new_skips.append(possible_skipping_move)
+				vector_math = Vector2i(neighboring_vectors_even_y_dict[move][0], neighboring_vectors_even_y_dict[move][1])
+			var middle_cell = selected_piece_cell + vector_math
+			if middle_cell in all_pieces:
+				skipping_moves_array.append(possible_skipping_move)
+				new_skips.append(possible_skipping_move)
 
 	# Recursively check for further skips from new positions
 	for skip in new_skips:
@@ -247,7 +246,7 @@ func change_player():
 	board_map.erase_previous_possible_moves()
 	
 	
-	print("Player ", current_player, "s turn")
+	print("Player ", current_player, ", your turn!")
 
 
 func handle_turn(position : Vector2i):
