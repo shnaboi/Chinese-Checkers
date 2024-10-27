@@ -55,6 +55,8 @@ func _ready():
 	board_map = $BoardTileMap    # Tilemap for the board spaces
 	gameboard_cells_array = board_map.get_gameboard_cells()
 	cursors = $CursorNode
+	
+	pieces_map.update_player_pieces(current_player)
 
 
 # Detect mouse input
@@ -224,7 +226,9 @@ func check_option():
 		cursors.set_cursor_appearance(cursors.MICE.SELECTED)
 	elif piece_id == get_player_piece_id(current_player):
 		cursors.set_cursor_appearance(cursors.MICE.OPTION)
+		pieces_map.show_option(piece_tile_pos, piece_id)
 	else:
+		pieces_map.update_player_pieces(current_player)
 		cursors.set_cursor_appearance()
 
 # **** MULTIPLAYER ****
@@ -239,6 +243,10 @@ func change_player():
 		current_player += 1
 	else:
 		current_player = 1
+	
+	# Change appearance of pieces
+	pieces_map.update_player_pieces(current_player)
+	# set_cell(coords: Vector2i, source_id: int = 1, atlas_coords: Vector2i = Vector2i(0, 0), alternative_tile: int = 0
 	
 	# Reset cursor appearance
 	cursors.position = Vector2(0, 0)
