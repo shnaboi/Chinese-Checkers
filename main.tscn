@@ -170,3 +170,18 @@ script = ExtResource("4_sr02f")
 
 [node name="CursorNode" parent="." instance=ExtResource("12_vi33n")]
 z_index = 10
+
+[node name="PlayClock" type="Timer" parent="."]
+wait_time = 9.9
+
+[node name="VisiblePlayClock" type="Label" parent="."]
+z_index = 9
+offset_left = -219.0
+offset_top = -350.0
+offset_right = -150.0
+offset_bottom = -281.0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "ayo"
+
+[connection signal="timeout" from="PlayClock" to="." method="_on_play_clock_timeout"]

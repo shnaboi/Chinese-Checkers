@@ -12,6 +12,8 @@ var board_map
 var gameboard_cells_array : Array
 var cursors
 var cursor_pos
+@onready var playclock = $PlayClock
+var visible_playclock
 
 # Store the selected piece tile position and ID
 var selected_piece = null
@@ -55,8 +57,12 @@ func _ready():
 	board_map = $BoardTileMap    # Tilemap for the board spaces
 	gameboard_cells_array = board_map.get_gameboard_cells()
 	cursors = $CursorNode
+	visible_playclock = $VisiblePlayClock
+	#visible_playclock.font_color(Color(0, 0, 0, 0))
 	
 	pieces_map.update_player_pieces(current_player)
+	
+	start_playclock()
 
 
 # Detect mouse input
@@ -78,6 +84,8 @@ func _input(event):
 
 func _physics_process(delta: float) -> void:
 	check_option()
+	check_playclock()
+	
 
 # Function to select a piece if clicked
 func select_piece(cursor_pos: Vector2):
@@ -256,15 +264,20 @@ func change_player():
 	else:
 		current_player = 1
 	
+	deselect_piece()
+	
 	# Change appearance of pieces
 	pieces_map.update_player_pieces(current_player)
 	# set_cell(coords: Vector2i, source_id: int = 1, atlas_coords: Vector2i = Vector2i(0, 0), alternative_tile: int = 0
 	
-	# Reset cursor appearance
+	# Reset cursor & timer appearances
 	cursors.position = Vector2(0, 0)
 	cursors.set_cursor_appearance()
 	
 	cursors.timer.stop()
+	
+	playclock.stop()
+	start_playclock()
 	
 	#FOR DEBUGGING - ERASE PREVIOUS POSSIBLE MOVES
 	if DEBUGGING:
@@ -274,5 +287,14 @@ func change_player():
 	print("Player ", current_player, ", your turn!")
 
 
-func handle_turn(position : Vector2i):
-	pass
+func start_playclock():
+	playclock.start()
+
+
+func _on_play_clock_timeout() -> void:
+	change_player()
+
+
+func check_playclock():
+	var time_left = str(ceili(playclock.time_left))
+	visible_playclock.text = (time_left)
