@@ -62,6 +62,10 @@ func _ready():
 # Detect mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_MASK_RIGHT:
+			deselect_piece()
+			return
+			
 		cursor_pos = cursors.position
 
 		if selected_piece_pos == null:
@@ -88,11 +92,19 @@ func select_piece(cursor_pos: Vector2):
 		selected_piece = piece_id
 		possible_moves_array = calc_possible_moves(selected_piece_pos) #Pass x,y of piece to calculate moves
 		
-		cursors.piece_selected = true
+		#cursors.piece_selected = true
 		cursors.set_cursor_appearance(cursors.MICE.SELECTED)
 		print("Piece selected at: ", selected_piece_pos)
 	else:
 		print("No piece found at: ", piece_tile_pos)
+
+
+func deselect_piece():
+	selected_piece = null
+	selected_piece_pos = null
+	
+	if DEBUGGING:
+		board_map.erase_previous_possible_moves()
 
 
 # Function to move the selected piece to the clicked board space

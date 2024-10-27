@@ -5,7 +5,6 @@ extends Node2D
 
 var cursor_speed = 333.0
 var global_mouse_pos
-var piece_selected = null
 
 var default_cursor : Sprite2D
 var option_cursor : Sprite2D
@@ -30,10 +29,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	global_mouse_pos = get_global_mouse_position()
-	update_cursor_pos(delta, piece_selected)
+	update_cursor_pos(delta)
 
 
-func update_cursor_pos(delta: float, piece_selected) -> void:
+func update_cursor_pos(delta: float) -> void:
 	# Get controller input (Y-axis is inverted in godot)
 	var controller_vector = Input.get_vector("Left", "Right", "Up", "Down")
 	
