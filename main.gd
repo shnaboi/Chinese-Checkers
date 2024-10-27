@@ -1,6 +1,8 @@
 extends Node2D
 
 
+const DEBUGGING = true
+
 # Create player variable to change for handling turns
 var current_player = 1
 
@@ -54,6 +56,7 @@ func _ready():
 	gameboard_cells_array = board_map.get_gameboard_cells()
 	cursors = $CursorNode
 
+
 # Detect mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
@@ -76,11 +79,11 @@ func select_piece(cursor_pos: Vector2):
 	var piece_tile_pos = pieces_map.local_to_map(cursor_pos)
 
 	# Check if there's a piece at the clicked tile
-	var piece = pieces_map.get_cell_source_id(piece_tile_pos)
+	var piece_id = pieces_map.get_cell_source_id(piece_tile_pos)
 
-	if piece == current_player:  # A piece is present
+	if piece_id == get_player_piece_id(current_player):  # A piece is present
 		selected_piece_pos = piece_tile_pos  # Store the selected piece's position
-		selected_piece = piece
+		selected_piece = piece_id
 		possible_moves_array = calc_possible_moves(selected_piece_pos) #Pass x,y of piece to calculate moves
 		
 		cursors.piece_selected = true
@@ -141,8 +144,9 @@ func calc_possible_moves(selected_piece_cell):
 	all_possible_moves = neighboring_moves + skippable_moves
 	
 	# ***** FOR DEBUGGING: SHOW ALL POSSIBLE MOVES *****
-	for move in all_possible_moves:
-		board_map.show_possible_moves(move)
+	if DEBUGGING:
+		for move in all_possible_moves:
+			board_map.show_possible_moves(move)
 	
 	print("Neighbor moves: ", neighboring_moves, "Skipping moves: ", skippable_moves)
 	
@@ -214,16 +218,21 @@ func check_option():
 	# Check ID of piece
 	var piece_id = pieces_map.get_cell_source_id(piece_tile_pos)
 	
-	if cursors.disabled_cursor:
+	if cursors.disabled_cursor.visible:
 		pass
 	elif selected_piece != null:
 		cursors.set_cursor_appearance(cursors.MICE.SELECTED)
-	elif piece_id == current_player:
+	elif piece_id == get_player_piece_id(current_player):
 		cursors.set_cursor_appearance(cursors.MICE.OPTION)
 	else:
 		cursors.set_cursor_appearance()
 
 # **** MULTIPLAYER ****
+
+
+func get_player_piece_id(player):
+	return pieces_map.piece_id_dict[player]
+
 
 func change_player():
 	if current_player != 6:
@@ -238,7 +247,8 @@ func change_player():
 	cursors.timer.stop()
 	
 	#FOR DEBUGGING - ERASE PREVIOUS POSSIBLE MOVES
-	board_map.erase_previous_possible_moves()
+	if DEBUGGING:
+		board_map.erase_previous_possible_moves()
 	
 	
 	print("Player ", current_player, ", your turn!")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqy1o1vlx2hih"
-path="res://.godot/imported/Chinese Checkers Small.png-80f584f0b750202de0c0cf00fcbdf3cf.ctex"
+uid="uid://cbefsmb066xgw"
+path="res://.godot/imported/purple.png-20c857753a54941ca16765233cdc166e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Game Boards/Chinese Checkers Small.png"
-dest_files=["res://.godot/imported/Chinese Checkers Small.png-80f584f0b750202de0c0cf00fcbdf3cf.ctex"]
+source_file="res://Pieces v3/purple.png"
+dest_files=["res://.godot/imported/purple.png-20c857753a54941ca16765233cdc166e.ctex"]
 
 [params]
 

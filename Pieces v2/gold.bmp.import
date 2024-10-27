@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://boltctkxrl8w7"
-path="res://.godot/imported/Tile.png-a4f5352bd61d697cded18b9604583226.ctex"
+uid="uid://b3iewlgvdyjg"
+path="res://.godot/imported/gold.bmp-d7bf33ee01fa2dc7e06b913abd32c44c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Game Boards/Tile.png"
-dest_files=["res://.godot/imported/Tile.png-a4f5352bd61d697cded18b9604583226.ctex"]
+source_file="res://Pieces v2/gold.bmp"
+dest_files=["res://.godot/imported/gold.bmp-d7bf33ee01fa2dc7e06b913abd32c44c.ctex"]
 
 [params]
 
