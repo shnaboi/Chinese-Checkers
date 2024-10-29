@@ -172,16 +172,36 @@ script = ExtResource("4_sr02f")
 z_index = 10
 
 [node name="PlayClock" type="Timer" parent="."]
-wait_time = 9.9
+wait_time = 14.75
+
+[node name="RoundCounter" type="Label" parent="."]
+z_index = 9
+offset_left = -337.0
+offset_top = -382.0
+offset_right = -153.0
+offset_bottom = -282.0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "Round: "
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="VisiblePlayClock" type="Label" parent="."]
 z_index = 9
-offset_left = -219.0
-offset_top = -350.0
-offset_right = -150.0
-offset_bottom = -281.0
+offset_left = -290.0
+offset_top = -319.0
+offset_right = -190.0
+offset_bottom = -219.0
 size_flags_horizontal = 0
 size_flags_vertical = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
 text = "ayo"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="timeout" from="PlayClock" to="." method="_on_play_clock_timeout"]

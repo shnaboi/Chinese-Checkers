@@ -6,7 +6,7 @@ const DEBUGGING = true
 # Create player variable to change for handling turns
 var current_player = 1
 
-# References to the tilemaps
+# References to Nodes & Scenes
 var pieces_map
 var board_map
 var gameboard_cells_array : Array
@@ -14,6 +14,8 @@ var cursors
 var cursor_pos
 @onready var playclock = $PlayClock
 var visible_playclock
+var round : int = 0
+var round_counter
 
 # Store the selected piece tile position and ID
 var selected_piece = null
@@ -58,11 +60,13 @@ func _ready():
 	gameboard_cells_array = board_map.get_gameboard_cells()
 	cursors = $CursorNode
 	visible_playclock = $VisiblePlayClock
+	round_counter = $RoundCounter
 	#visible_playclock.font_color(Color(0, 0, 0, 0))
 	
 	pieces_map.update_player_pieces(current_player)
 	
 	start_playclock()
+	update_round()
 
 
 # Detect mouse input
@@ -251,6 +255,11 @@ func check_option():
 		pieces_map.update_player_pieces(current_player)
 		cursors.set_cursor_appearance()
 
+
+func update_round():
+	round += 1
+	round_counter.text = "Round: " + str(round)
+
 # **** MULTIPLAYER ****
 
 
@@ -263,6 +272,7 @@ func change_player():
 		current_player += 1
 	else:
 		current_player = 1
+		update_round()
 	
 	deselect_piece()
 	
