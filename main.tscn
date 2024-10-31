@@ -176,10 +176,10 @@ wait_time = 14.75
 
 [node name="RoundCounter" type="Label" parent="."]
 z_index = 9
-offset_left = -337.0
-offset_top = -382.0
-offset_right = -153.0
-offset_bottom = -282.0
+offset_left = -350.0
+offset_top = -360.0
+offset_right = -166.0
+offset_bottom = -260.0
 size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -191,10 +191,10 @@ vertical_alignment = 1
 
 [node name="VisiblePlayClock" type="Label" parent="."]
 z_index = 9
-offset_left = -290.0
-offset_top = -319.0
-offset_right = -190.0
-offset_bottom = -219.0
+offset_left = -300.0
+offset_top = -295.0
+offset_right = -200.0
+offset_bottom = -195.0
 size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0, 0, 0, 1)
